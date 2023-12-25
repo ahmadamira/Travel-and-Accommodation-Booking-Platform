@@ -28,7 +28,7 @@ function Header() {
   };
 
   return (
-    <AppBar position="static" sx={{ background: "white" }}>
+    <AppBar position="fixed" sx={{ background: "white" }}>
       <Container maxWidth="lg">
         <Toolbar disableGutters>
           <Typography

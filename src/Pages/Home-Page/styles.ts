@@ -6,10 +6,11 @@ export const StyledBox = styled(Box)(({}) => ({
   backgroundSize: "cover",
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
-  height: "530px",
+  height: "600px",
   display: "inline-block",
   position: "relative",
   width: "100%",
+  zIndex: 0,
 }));
 
 export const StyledButton = styled(Button)(({}) => ({
@@ -17,9 +18,10 @@ export const StyledButton = styled(Button)(({}) => ({
   paddingRight: "20px",
   backgroundColor: "#FF5403",
   color: "white",
+  width: "150px",
   "&:hover": {
     backgroundColor: "white",
     color: "#FF5403",
-    border: "3px solid #FF5403",
+    border: "1px solid #FF5403",
   },
 }));
