@@ -61,6 +61,7 @@ interface FeaturedDeal {
   description: string;
   roomPhotoUrl: string;
 }
+
 interface TrendingDestination {
   cityId: number;
   cityName: string;
@@ -93,6 +94,7 @@ const HomePage: React.FC = () => {
       console.log(values);
     },
   });
+
   useEffect(() => {
     const fetchFeaturedDeals = async () => {
       try {
