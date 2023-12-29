@@ -6,6 +6,7 @@ import AdminPage from "./Pages/Admin-Page/AdminPage";
 import SearchPage from "./Pages/Search-Page/SearchPage";
 import HotelPage from "./Pages/Hotel-Page/HotelPage";
 import CheckoutPage from "./Pages/Checkout-Page/CheckoutPage";
+import ConfirmationPage from "./Pages/Confirmation-Page/ConfirmationPage";
 
 const Router = () => {
   return (
@@ -16,6 +17,7 @@ const Router = () => {
       <Route path="/search" element={<SearchPage />} />
       <Route path="/hotel" element={<HotelPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/confirmation" element={<ConfirmationPage />} />
     </Routes>
   );
 };
