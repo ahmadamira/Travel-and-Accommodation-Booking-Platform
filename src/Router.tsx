@@ -4,6 +4,7 @@ import LoginPage from "./Pages/Login-Page/index";
 import HomePage from "./Pages/Home-Page/HomePage";
 import AdminPage from "./Pages/Admin-Page/AdminPage";
 import SearchPage from "./Pages/Search-Page/SearchPage";
+import HotelPage from "./Pages/Hotel-Page/HotelPage";
 
 const Router = () => {
   return (
@@ -12,6 +13,7 @@ const Router = () => {
       <Route path="/home" element={<HomePage />} />
       <Route path="/admin" element={<AdminPage />} />
       <Route path="/search" element={<SearchPage />} />
+      <Route path="/hotel" element={<HotelPage />} />
     </Routes>
   );
 };
