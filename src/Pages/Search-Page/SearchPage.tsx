@@ -39,7 +39,6 @@ const SearchPage = () => {
 
   return (
     <Box>
-      <Header />
       <Box
         sx={{
           backgroundImage: `url("/imgs/SearchHeader.png")`,
@@ -296,8 +295,6 @@ const SearchPage = () => {
           </Grid>
         </Grid>
       </Container>
-
-      <Footer />
     </Box>
   );
 };

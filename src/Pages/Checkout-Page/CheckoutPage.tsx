@@ -137,7 +137,6 @@ const CheckoutPage = () => {
   });
   return (
     <Box>
-      <Header />
       <Container maxWidth="xl">
         <Grid container>
           <Grid
@@ -302,7 +301,6 @@ const CheckoutPage = () => {
           </Grid>
         </Grid>
       </Container>
-      <Footer />
     </Box>
   );
 };
