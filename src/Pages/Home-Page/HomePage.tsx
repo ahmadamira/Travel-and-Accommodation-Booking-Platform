@@ -15,7 +15,7 @@ import SectionTitleSubtitle from "./Components/SectionTitleSubtitle/SectionTitle
 import TrendingDestinationCard from "./Components/TrendingDestinationCard/TrendingDestinationCard";
 import axios from "axios";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   destination: Yup.string().required("Destination is required"),
@@ -50,6 +50,7 @@ function isTodayOrLater(date: Date) {
 }
 
 interface FeaturedDeal {
+  hotelId: number;
   originalRoomPrice: number;
   discount: number;
   finalPrice: number;

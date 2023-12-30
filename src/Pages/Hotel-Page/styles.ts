@@ -1,5 +1,5 @@
+import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { Box, Typography } from "@mui/material";
 
 export const Title = styled(Typography)(({ theme }) => ({
   height: "48px",
@@ -14,6 +14,7 @@ export const Title = styled(Typography)(({ theme }) => ({
     lineHeight: "36px",
   },
 }));
+
 export const SubTitle = styled(Typography)(({ theme }) => ({
   fontFamily: "Arimo",
   fontStyle: "normal",
@@ -21,28 +22,9 @@ export const SubTitle = styled(Typography)(({ theme }) => ({
   fontSize: "20px",
   lineHeight: "38px",
   color: "#041562",
-  marginBottom: "5px",
+  marginBottom: "10px",
   [theme.breakpoints.down("sm")]: {
     fontSize: "20px",
     lineHeight: "26px",
   },
-}));
-
-export const HeroBox = styled(Box)(({ theme }) => ({
-  backgroundImage: `url("/imgs/SearchHeader.png")`,
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-  height: "300px",
-  display: "inline-block",
-  position: "relative",
-  width: "100%",
-  mt: "60px",
-}));
-
-export const HeroTitle = styled(Box)(({ theme }) => ({
-  position: "relative",
-  right: "50%",
-  top: "50%",
-  textAlign: "center",
 }));

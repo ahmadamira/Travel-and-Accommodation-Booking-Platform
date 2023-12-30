@@ -14,18 +14,61 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import React, { useState } from "react";
-import Header from "../Components/Header/Header";
-import Footer from "../Components/Footer/Footer";
+import React, { useEffect, useState } from "react";
 import { Container } from "@mui/joy";
 import Paper from "@mui/material/Paper";
 import SearchCard from "./Components/SeachCard/SearchCard";
-import { Title, SubTitle } from "./styles";
+import { Title, SubTitle, HeroBox, HeroTitle } from "./styles";
+import axios from "axios";
 
 const SearchPage = () => {
   const [sortBY, setSortBy] = useState("");
   const [price, setPrice] = React.useState<number[]>([20, 37]);
   const [roomType, setRoomType] = useState("");
+  const [searchParams, setSearchParams] = useState({
+    destination: "",
+    checkInDate: "",
+    checkOutDate: "",
+    numberOfAdults: 0,
+    numberOfChildren: 0,
+    numberOfRooms: 0,
+  });
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+
+  useEffect(() => {
+    const storedSearchParams = sessionStorage.getItem("searchParams");
+    if (storedSearchParams) {
+      const parsedSearchParams = JSON.parse(storedSearchParams);
+      setSearchParams(parsedSearchParams);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (searchParams && searchParams.destination) {
+      const queryParams = new URLSearchParams({
+        city: searchParams.destination,
+        checkInDate: searchParams.checkInDate,
+        checkOutDate: searchParams.checkOutDate,
+        numberOfRooms: searchParams.numberOfRooms.toString(),
+        adults: searchParams.numberOfAdults.toString(),
+        children: searchParams.numberOfChildren.toString(),
+      });
+
+      const apiUrl = `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/home/search?${queryParams}`;
+
+      console.log("Destination:", searchParams.destination);
+      console.log("Constructed URL:", apiUrl);
+
+      axios
+        .get(apiUrl)
+        .then((response) => {
+          setSearchResults(response.data);
+        })
+        .catch((error) => {
+          console.error("API Error:", error);
+        });
+    }
+  }, [searchParams]);
 
   const handlePriceChange = (event: Event, newValue: number | number[]) => {
     setPrice(newValue as number[]);
@@ -39,30 +82,13 @@ const SearchPage = () => {
 
   return (
     <Box>
-      <Box
-        sx={{
-          backgroundImage: `url("/imgs/SearchHeader.png")`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          height: "300px",
-          display: "inline-block",
-          position: "relative",
-          width: "100%",
-          mt: "60px",
-          zIndex: 0,
-        }}
-      >
+      <HeroBox>
         <Container maxWidth="lg" sx={{ height: "100%" }}>
-          <Box
+          <HeroTitle
             sx={{
-              position: "relative",
-              right: "50%",
-              top: "50%",
               transform: {
                 xs: "translate(50%, -50%)",
               },
-              textAlign: "center",
               width: { xs: "100%", md: "initial" },
             }}
           >
@@ -76,9 +102,9 @@ const SearchPage = () => {
             >
               Search results
             </Typography>
-          </Box>
+          </HeroTitle>
         </Container>
-      </Box>
+      </HeroBox>
       <Container maxWidth="xl" sx={{ mt: 3 }}>
         <form>
           <Grid
@@ -103,6 +129,10 @@ const SearchPage = () => {
                 id="destination"
                 label="Search for hotels, cities..."
                 fullWidth
+                value={searchParams.destination}
+                InputProps={{
+                  readOnly: true,
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={2}>
@@ -111,6 +141,10 @@ const SearchPage = () => {
                 label="Check-in Date"
                 type="date"
                 fullWidth
+                value={searchParams.checkInDate}
+                InputProps={{
+                  readOnly: true,
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={2}>
@@ -120,6 +154,10 @@ const SearchPage = () => {
                 type="date"
                 color="primary"
                 fullWidth
+                value={searchParams.checkOutDate}
+                InputProps={{
+                  readOnly: true,
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={2}>
@@ -129,6 +167,10 @@ const SearchPage = () => {
                 type="number"
                 color="primary"
                 fullWidth
+                value={searchParams.numberOfAdults}
+                InputProps={{
+                  readOnly: true,
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={2}>
@@ -138,6 +180,10 @@ const SearchPage = () => {
                 type="number"
                 color="primary"
                 fullWidth
+                value={searchParams.numberOfChildren}
+                InputProps={{
+                  readOnly: true,
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={2}>
@@ -147,6 +193,10 @@ const SearchPage = () => {
                 type="number"
                 color="primary"
                 fullWidth
+                value={searchParams.numberOfRooms}
+                InputProps={{
+                  readOnly: true,
+                }}
               />
             </Grid>
           </Grid>
@@ -280,17 +330,19 @@ const SearchPage = () => {
                 </FormControl>
               </Grid>
             </Grid>
-
             <Paper
               sx={{ overflow: "auto", maxHeight: "500px", minHeight: "500px" }}
             >
-              <SearchCard
-                thumbnail="/imgs/Heroimg.png"
-                name="Example Hotel"
-                starRating={4}
-                pricePerNight={120}
-                description="A beautiful hotel with a stunning view."
-              />
+              {searchResults.map((result, index) => (
+                <SearchCard
+                  key={index}
+                  thumbnail={result.roomPhotoUrl}
+                  name={result.hotelName}
+                  starRating={result.starRating}
+                  pricePerNight={result.roomPrice}
+                  description={result.description}
+                />
+              ))}
             </Paper>
           </Grid>
         </Grid>

@@ -30,7 +30,7 @@ const Router: React.FC = () => {
         }
       />
       <Route
-        path="/hotel"
+        path="/hotel/:id"
         element={
           <Layout>
             <HotelPage />

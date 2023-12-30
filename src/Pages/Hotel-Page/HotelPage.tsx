@@ -1,54 +1,132 @@
 "use client";
 import { Box, Container, Grid, Paper, Rating } from "@mui/material";
-import React from "react";
-import Header from "../Components/Header/Header";
-import Footer from "../Components/Footer/Footer";
 import Carousel from "react-material-ui-carousel";
 import { styled } from "@mui/system";
 import { Typography } from "@mui/material";
 import ReviewCard from "./Components/Review-Card/ReviewCard";
 import RoomCard from "./Components/Room-Card/RoomCard";
 import { APIProvider, Map } from "@vis.gl/react-google-maps";
-export const Title = styled(Typography)(({ theme }) => ({
-  height: "48px",
-  fontFamily: "Arimo",
-  fontStyle: "normal",
-  fontWeight: 400,
-  fontSize: "30px",
-  lineHeight: "48px",
-  color: "#041562",
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "24px",
-    lineHeight: "36px",
-  },
-}));
+import { Title, SubTitle } from "./styles";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export const SubTitle = styled(Typography)(({ theme }) => ({
-  fontFamily: "Arimo",
-  fontStyle: "normal",
-  fontWeight: 200,
-  fontSize: "20px",
-  lineHeight: "38px",
-  color: "#041562",
-  marginBottom: "10px",
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "20px",
-    lineHeight: "26px",
-  },
-}));
+interface HotelInfo {
+  hotelName: string;
+  location: string;
+  description: string;
+  latitude: number;
+  longitude: number;
+  amenities: {
+    name: string;
+    description: string;
+  }[];
+  starRating: number;
+  availableRooms: number;
+  imageUrl: string;
+}
+interface Review {
+  reviewId: number;
+  customerName: string;
+  rating: number;
+  description: string;
+}
+interface Room {
+  roomNumber: number;
+  roomPhotoUrl: string;
+  roomType: string;
+  capacityOfAdults: number;
+  capacityOfChildren: number;
+  roomAmenities: {
+    name: string;
+    description: string;
+  }[];
+  price: number;
+  availability: boolean;
+}
+
 const HotelPage = () => {
-  const galleryImages = [
-    "/imgs/Heroimg.png",
-    "/imgs/Heroimg.png",
-    "/imgs/Heroimg.png",
-    "/imgs/Heroimg.png",
-    "/imgs/Heroimg.png",
-    "/imgs/Heroimg.png",
-    "/imgs/Heroimg.png",
-    "/imgs/Heroimg.png",
-    "/imgs/Heroimg.png",
-  ];
-  const position = { lat: 31.916989, lng: 35.206938 };
+  const { id } = useParams();
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [hotelInfo, setHotelInfo] = useState<HotelInfo | null>({
+    hotelName: "",
+    location: "",
+    description: "",
+    latitude: 0,
+    longitude: 0,
+    amenities: [],
+    starRating: 0,
+    availableRooms: 0,
+    imageUrl: "",
+  });
+
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [availableRooms, setAvailableRooms] = useState<Room[]>([]);
+  const [searchParams, setSearchParams] = useState({
+    destination: "",
+    checkInDate: "",
+    checkOutDate: "",
+    numberOfAdults: 0,
+    numberOfChildren: 0,
+    numberOfRooms: 0,
+  });
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/hotels/${id}/gallery`
+      )
+      .then((response) => {
+        const images = response.data.map((image: any) => image.url);
+        setGalleryImages(images);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
+    axios
+      .get(
+        `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/hotels/${id}?includeRooms=true`
+      )
+      .then((response) => {
+        setHotelInfo(response.data);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
+    axios
+      .get(
+        `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/hotels/${id}/reviews`
+      )
+      .then((response) => {
+        setReviews(response.data);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
+    const storedSearchParams = sessionStorage.getItem("searchParams");
+    if (storedSearchParams) {
+      const parsedSearchParams = JSON.parse(storedSearchParams);
+      setSearchParams(parsedSearchParams);
+    }
+    console.log(searchParams.checkInDate);
+    console.log(searchParams.checkOutDate);
+
+    axios
+      .get(
+        `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/hotels/${id}/available-rooms?checkInDate=2023-12-31&CheckOutDate=2023-1-1`
+      )
+      .then((response) => {
+        setAvailableRooms(response.data);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+      });
+  }, [id]);
+
+  const position = {
+    lat: hotelInfo?.latitude || 0,
+    lng: hotelInfo?.longitude || 0,
+  };
   return (
     <Box>
       <Container maxWidth="xl">
@@ -69,24 +147,28 @@ const HotelPage = () => {
             <Grid container>
               <Grid item xs={12} sm={12} md={12}>
                 {" "}
-                <Title>Hotel Name</Title>
+                <Title>{hotelInfo?.hotelName}</Title>
               </Grid>
               <Grid item sx={{ mt: 2 }} xs={12} sm={12} md={12}>
-                <Rating size="large"></Rating>
+                <Rating size="large" value={hotelInfo?.starRating} readOnly />
               </Grid>
               <Grid item sx={{ mt: 2 }} xs={12} sm={12} md={12}>
                 <SubTitle>Description:</SubTitle>
                 <Typography variant="body1">
-                  this hotel is in Ramallah and have 5 star rating.
+                  {hotelInfo?.description}
                 </Typography>
               </Grid>
               <Grid item sx={{ mt: 2, mb: 2 }} xs={12} sm={12} md={12}>
                 <SubTitle>Guest Reviews:</SubTitle>
                 <Carousel>
-                  <ReviewCard />
-                  <ReviewCard />
-                  <ReviewCard />
-                  <ReviewCard />
+                  {reviews.map((review: any) => (
+                    <ReviewCard
+                      key={review.reviewId}
+                      userName={review.customerName}
+                      rating={review.rating}
+                      comment={review.description}
+                    />
+                  ))}
                 </Carousel>
               </Grid>
             </Grid>
@@ -104,7 +186,7 @@ const HotelPage = () => {
               pr: 2,
               mb: 2,
               pb: 2,
-              maxHeight: "500px",
+              maxHeight: "600px",
             }}
           >
             <Carousel>
@@ -113,18 +195,8 @@ const HotelPage = () => {
                   <img
                     src={image}
                     alt={`Image ${index}`}
-                    style={{ width: "100%", height: "100%" }}
+                    style={{ width: "100%", height: "460px" }}
                   />
-                  {/* <Box
-                    sx={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "100%",
-                      backgroundColor: "rgba(0,0,0,0.9)",
-                    }}
-                  ></Box> */}
                 </Box>
               ))}
             </Carousel>
@@ -166,13 +238,17 @@ const HotelPage = () => {
             <Paper
               sx={{ overflow: "auto", maxHeight: "300px", minHeight: "300px" }}
             >
-              <RoomCard
-                thumbnail="/imgs/Heroimg.png"
-                name="Example Hotel"
-                starRating={4}
-                pricePerNight={120}
-                description="A beautiful hotel with a stunning view."
-              />
+              {availableRooms.map((room) => (
+                <RoomCard
+                  key={room.roomNumber}
+                  thumbnail={room.roomPhotoUrl}
+                  name={` ${room.roomType} Room`}
+                  pricePerNight={room.price}
+                  capacityOfAdults={room.capacityOfAdults}
+                  capacityOfChildren={room.capacityOfChildren}
+                  roomAmenities={room.roomAmenities}
+                />
+              ))}
             </Paper>
           </Grid>
         </Grid>
