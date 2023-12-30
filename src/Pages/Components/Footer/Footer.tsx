@@ -1,19 +1,10 @@
-import React from "react";
-import {
-  Container,
-  Grid,
-  Typography,
-  Box,
-  Divider,
-  TextField,
-  InputAdornment,
-  IconButton,
-} from "@mui/material";
+import { Container, Grid, Typography, Box, Divider } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import { StyledTypo, StyledTitle } from "./styles";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <footer style={{ backgroundColor: "#19224D", padding: "2rem 0" }}>
       <Container maxWidth="lg">
@@ -26,20 +17,14 @@ const Footer = () => {
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} textAlign="left" color="white">
-            <Typography variant="h6" textAlign="left" sx={{ mb: 2, mt: 2 }}>
-              DISCOVER DESTINATION
-            </Typography>
-            <Typography textAlign="left">Bali</Typography>
-            <Typography textAlign="left">Karimun Jawa</Typography>
-            <Typography textAlign="left">Jepara</Typography>
-            <Typography textAlign="left" sx={{ mb: 1 }}>
-              Lombok
-            </Typography>
+            <StyledTitle variant="h6">DISCOVER DESTINATION</StyledTitle>
+            <StyledTypo>Bali</StyledTypo>
+            <StyledTypo>Karimun Jawa</StyledTypo>
+            <StyledTypo>Jepara</StyledTypo>
+            <StyledTypo sx={{ mb: 1 }}>Lombok</StyledTypo>
           </Grid>
           <Grid item xs={12} sm={6} md={4} textAlign="left" color="white">
-            <Typography textAlign="left" variant="h6" sx={{ mb: 2, mt: 2 }}>
-              CONTACT US
-            </Typography>
+            <StyledTitle textAlign="left">CONTACT US</StyledTitle>
             <Typography textAlign="left">
               24 Shipley St.Arvada, CO 80003
             </Typography>
@@ -50,17 +35,23 @@ const Footer = () => {
             <Typography textAlign="left" color="#FF5403">
               Social Media
             </Typography>
-            <Grid item sx={{ mb: 1 }}>
-              <FacebookIcon fontSize="large" sx={{ mr: 1 }} />
-              <InstagramIcon fontSize="large" sx={{ mr: 1 }} />
-              <TwitterIcon fontSize="large" />
-            </Grid>
+            <Box display="flex" alignItems="center" sx={{ mb: 1 }}>
+              <FacebookIcon
+                fontSize="large"
+                sx={{ mr: 1, cursor: "pointer" }}
+              />
+              <InstagramIcon
+                fontSize="large"
+                sx={{ mr: 1, cursor: "pointer" }}
+              />
+              <TwitterIcon fontSize="large" sx={{ cursor: "pointer" }} />
+            </Box>
           </Grid>
         </Grid>
         <Divider />
         <Box display="flex" flexDirection="row" color="#C4C4C4">
           <Box mt={2} textAlign="left">
-            <Typography variant="body2">© 2020 NorthStar eCommerce</Typography>
+            <Typography variant="body2">© 2020 TravelBuddy </Typography>
             <Typography variant="body2">
               Privacy Policy Terms & Conditions
             </Typography>

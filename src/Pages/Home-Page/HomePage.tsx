@@ -1,8 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
-import Header from "../Components/Header/Header";
-import Footer from "../Components/Footer/Footer";
 import {
   Box,
   Typography,
@@ -17,6 +15,7 @@ import SectionTitleSubtitle from "./Components/SectionTitleSubtitle/SectionTitle
 import TrendingDestinationCard from "./Components/TrendingDestinationCard/TrendingDestinationCard";
 import axios from "axios";
 import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   destination: Yup.string().required("Destination is required"),
@@ -79,9 +78,11 @@ const HomePage: React.FC = () => {
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
-      destination: "", // Add destination field
+      destination: "",
       checkInDate: today.toISOString().split("T")[0],
       checkOutDate: tomorrow.toISOString().split("T")[0],
       numberOfAdults: 2,
@@ -90,11 +91,14 @@ const HomePage: React.FC = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      // Handle form submission here
-      console.log(values);
+      saveSearchToSessionStorage(values);
+      navigate("/search");
     },
   });
 
+  const saveSearchToSessionStorage = (searchParams: any) => {
+    sessionStorage.setItem("searchParams", JSON.stringify(searchParams));
+  };
   useEffect(() => {
     const fetchFeaturedDeals = async () => {
       try {
@@ -126,8 +130,7 @@ const HomePage: React.FC = () => {
   const displayedFeaturedDeals = featuredDeals.slice(0, 4);
 
   return (
-    <div>
-      <Header />
+    <Box>
       <StyledBox>
         <Container maxWidth="lg" sx={{ height: "100%" }}>
           <Box
@@ -167,7 +170,6 @@ const HomePage: React.FC = () => {
             spacing={2}
             justifyContent="center"
             alignItems="center"
-            zIndex={1}
             padding={5}
             marginTop={2}
             marginBottom={2}
@@ -325,7 +327,7 @@ const HomePage: React.FC = () => {
           subtitle="Discover Our Best Featured Deals"
         />
         <Grid container spacing={2}>
-          {displayedFeaturedDeals.map((deal, index) => (
+          {featuredDeals.map((deal, index) => (
             <Grid item key={index} xs={12} sm={6} md={3}>
               <Grid container justifyContent="center">
                 <FeaturedDealsCard {...deal} />
@@ -363,8 +365,7 @@ const HomePage: React.FC = () => {
           ))}
         </Grid>
       </Container>
-      <Footer />
-    </div>
+    </Box>
   );
 };
 

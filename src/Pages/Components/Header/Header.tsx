@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -14,12 +14,20 @@ import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import CasesOutlinedIcon from "@mui/icons-material/CasesOutlined";
 import { Badge } from "@mui/material";
 
-const pages = ["Home", "About", "Contactus"];
+interface PageProps {
+  page: string;
+}
+
+const pages: PageProps[] = [
+  { page: "Home" },
+  { page: "Search" },
+  { page: "Checkout" },
+];
 
 function Header() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
-  const handleOpenNavMenu = (event: any) => {
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
 
@@ -29,13 +37,13 @@ function Header() {
 
   return (
     <AppBar position="fixed" sx={{ background: "white" }}>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
             variant="h6"
             noWrap
             component={Link}
-            to="/home"
+            to="/"
             sx={{
               mr: 9,
               ml: 3,
@@ -54,13 +62,7 @@ function Header() {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-            >
+            <IconButton size="large" onClick={handleOpenNavMenu}>
               <MenuIcon />
             </IconButton>
             <Menu
@@ -81,8 +83,12 @@ function Header() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+              {pages.map(({ page }) => (
+                <MenuItem
+                  color="#041562"
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                >
                   <Button
                     key={page}
                     component={Link}
@@ -120,21 +126,21 @@ function Header() {
             Travel Buddy
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {pages.map(({ page }) => (
               <Button
                 key={page}
                 component={Link}
                 to={page === "Home" ? "/" : "/" + page.toLowerCase()}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "black", display: "block" }}
+                sx={{ my: 2, color: "#041562", display: "block" }}
               >
                 {page}
               </Button>
             ))}
           </Box>
           <Box>
-            <Link to="/total" style={{ textDecoration: "none" }}>
-              <button
+            <Link to="/login" style={{ textDecoration: "none" }}>
+              <Button
                 title="Log out"
                 style={{
                   background: "none",
@@ -147,10 +153,10 @@ function Header() {
                     sx={{ color: "black", position: "relative", pr: 1.5 }}
                   />
                 </Badge>
-              </button>
+              </Button>
             </Link>
             <Badge badgeContent={0} color="primary">
-              <Link to="/total" style={{ textDecoration: "none" }}>
+              <Link to="/checkout" style={{ textDecoration: "none" }}>
                 <CasesOutlinedIcon
                   sx={{ color: "black", position: "relative", pr: 1.5 }}
                 />

@@ -51,7 +51,6 @@ const HotelPage = () => {
   const position = { lat: 31.916989, lng: 35.206938 };
   return (
     <Box>
-      <Header />
       <Container maxWidth="xl">
         <Grid container spacing={2} mt={10} mb={5}>
           <Grid
@@ -178,7 +177,6 @@ const HotelPage = () => {
           </Grid>
         </Grid>
       </Container>
-      <Footer />
     </Box>
   );
 };

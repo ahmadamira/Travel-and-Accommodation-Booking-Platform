@@ -40,7 +40,6 @@ const ConfirmationPage = () => {
   };
   return (
     <Box>
-      <Header />
       <Container maxWidth="xl">
         <Box
           sx={{
@@ -117,7 +116,6 @@ const ConfirmationPage = () => {
           </Paper>
         </Box>
       </Container>
-      <Footer />
     </Box>
   );
 };
