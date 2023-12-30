@@ -10,23 +10,28 @@ import Chip from "@mui/material/Chip";
 interface HotelCardProps {
   thumbnail: string;
   name: string;
-  starRating: number;
+  capacityOfAdults: number;
+  capacityOfChildren: number;
+  roomAmenities: {
+    name: string;
+    description: string;
+  }[];
   pricePerNight: number;
-  description: string;
 }
 
 const RoomCard: React.FC<HotelCardProps> = ({
   thumbnail,
   name,
-  starRating,
+  capacityOfAdults,
+  capacityOfChildren,
+  roomAmenities,
   pricePerNight,
-  description,
 }) => {
   return (
     <Card
       sx={{
         display: "flex",
-        flexDirection: { xs: "column", md: "row" }, // Vertical on xs (extra-small) screens, Horizontal on md (medium) screens
+        flexDirection: { xs: "column", md: "row" },
         width: "95%",
         margin: "10px",
         border: "2px solid lightGray",
@@ -50,16 +55,16 @@ const RoomCard: React.FC<HotelCardProps> = ({
       />
       <CardContent>
         <Typography variant="h6" component="div" color="#041562">
-          Standerd Room
+          {name}
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          A room that can host 2 adults and 1 child
+          {`A room that can host ${capacityOfAdults} adults and ${capacityOfChildren} child`}
         </Typography>
         <Box sx={{ mt: 1, mb: 1 }}>
           <Typography variant="body1">Amenities:</Typography>
-          <Chip label="Free WiFi" sx={{ m: 0.5 }} />
-          <Chip label="Free WiFi" sx={{ m: 0.5 }} />
-          <Chip label="Free WiFi" sx={{ m: 0.5 }} />
+          {roomAmenities.map((amenity, index) => (
+            <Chip key={index} label={amenity.name} sx={{ m: 0.5 }} />
+          ))}
         </Box>
         <Typography variant="body1" color="text.primary">
           {`$${pricePerNight}/night`}

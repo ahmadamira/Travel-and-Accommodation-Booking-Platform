@@ -52,7 +52,7 @@ const SearchCard: React.FC<HotelCardProps> = ({
         <Typography variant="h6" component="div">
           {name}
         </Typography>
-        <Rating name="read-only" value={4} readOnly />
+        <Rating name="read-only" value={starRating} readOnly />
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
