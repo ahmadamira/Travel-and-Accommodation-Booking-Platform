@@ -21,6 +21,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import { Button, InputBase } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import HotelTable from "./Hotel-Table/HotelTable";
+import CityTable from "./City-Table/CityTable";
+import RoomTable from "./Room-Table/RoomTable";
 
 const drawerWidth = 240;
 
@@ -85,13 +87,13 @@ export default function AdminPage() {
   const renderContent = () => {
     switch (selectedMenuItem) {
       case "Manage Cities":
-        return <Typography variant="h4">Cities Content</Typography>;
+        return <CityTable />;
       case "Manage Hotels":
         return <HotelTable />;
       case "Manage Rooms":
-        return <Typography variant="h4">Rooms Content</Typography>;
+        return <RoomTable />;
       default:
-        return <Typography variant="h4">Cities Content</Typography>;
+        return <CityTable />;
     }
   };
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {

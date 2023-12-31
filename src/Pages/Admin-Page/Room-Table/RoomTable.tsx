@@ -1,4 +1,4 @@
-// HotelTable.tsx
+// RoomTable.tsx
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -12,34 +12,31 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import HotelForm from "../Hotel-Form/HotelForm";
-import UpdateHotelForm from "../Update-Hotel-Form/UpdateHotelForm";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import RoomForm from "../Room-Form/RoomForm";
+import UpdateRoomForm from "../Update-Room-Form/UpdateRoomForm";
 
-export interface Row {
-  name: string;
-  starRate: number;
-  owner: string;
-  roomNumber: number;
+export interface Room {
+  number: number;
+  availability: boolean;
+  adults: number;
+  children: number;
   creationDate: string;
   modificationDate: string;
 }
 
-const HotelTable = () => {
-  const [tableRows, setTableRows] = useState<Row[]>([]);
+const RoomTable = () => {
+  const [tableRows, setTableRows] = useState<Room[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<Row | null>(null);
+  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
 
-  // Add some sample data when the component mounts
   useEffect(() => {
-    const sampleData: Row[] = [
+    const sampleData: Room[] = [
       {
-        name: "City A",
-        starRate: 4,
-        owner: "John Doe",
-        roomNumber: 101,
+        number: 101,
+        availability: true,
+        adults: 2,
+        children: 1,
         creationDate: "2022-01-01",
         modificationDate: "2022-01-05",
       },
@@ -48,19 +45,19 @@ const HotelTable = () => {
     setTableRows(sampleData);
   }, []);
 
-  const handleCreate = (newHotel: Row) => {
-    setTableRows((prevRows) => [...prevRows, newHotel]);
+  const handleCreate = (newRoom: Room) => {
+    setTableRows((prevRows) => [...prevRows, newRoom]);
   };
 
-  const handleDelete = (name: string) => {
-    const updatedRows = tableRows.filter((row) => row.name !== name);
+  const handleDelete = (number: number) => {
+    const updatedRows = tableRows.filter((room) => room.number !== number);
     setTableRows(updatedRows);
   };
 
-  const handleUpdate = (updatedHotel: Row) => {
-    if (selectedRow) {
-      const updatedRows = tableRows.map((row) =>
-        row.name === selectedRow.name ? updatedHotel : row
+  const handleUpdate = (updatedRoom: Room) => {
+    if (selectedRoom) {
+      const updatedRows = tableRows.map((room) =>
+        room.number === selectedRoom.number ? updatedRoom : room
       );
       setTableRows(updatedRows);
     }
@@ -81,7 +78,7 @@ const HotelTable = () => {
         }}
       >
         <Box display="flex" justifyContent="space-between" sx={{ mb: 2 }}>
-          <Typography variant="h5">Manage Hotels</Typography>
+          <Typography variant="h5">Manage Rooms</Typography>
           <Button
             variant="contained"
             color="primary"
@@ -89,7 +86,7 @@ const HotelTable = () => {
           >
             Create
           </Button>
-          <HotelForm
+          <RoomForm
             open={isFormOpen}
             handleClose={() => setIsFormOpen(false)}
             handleCreate={handleCreate}
@@ -100,26 +97,26 @@ const HotelTable = () => {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Delete Hotel</TableCell>
+                <TableCell>Delete Room</TableCell>
                 <TableCell>Update</TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="left">Star Rate</TableCell>
-                <TableCell align="left">Owner</TableCell>
-                <TableCell align="left">Room Number</TableCell>
+                <TableCell align="left">Number</TableCell>
+                <TableCell align="left">Availability</TableCell>
+                <TableCell align="left">Adults</TableCell>
+                <TableCell align="left">Children</TableCell>
                 <TableCell align="left">Creation Date</TableCell>
                 <TableCell align="left">Modification Date</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {tableRows.map((row) => (
+              {tableRows.map((room) => (
                 <TableRow
-                  key={row.name}
+                  key={room.number}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell>
                     <Button
                       sx={{ color: "red" }}
-                      onClick={() => handleDelete(row.name)}
+                      onClick={() => handleDelete(room.number)}
                     >
                       Delete
                     </Button>
@@ -128,30 +125,32 @@ const HotelTable = () => {
                     <Button
                       color="primary"
                       onClick={() => {
-                        setSelectedRow(row);
+                        setSelectedRoom(room);
                         setIsUpdateFormOpen(true);
                       }}
                     >
                       Update
                     </Button>
                   </TableCell>
-                  <TableCell align="left">{row.name}</TableCell>
-                  <TableCell align="left">{row.starRate}</TableCell>
-                  <TableCell align="left">{row.owner}</TableCell>
-                  <TableCell align="left">{row.roomNumber}</TableCell>
-                  <TableCell align="left">{row.creationDate}</TableCell>
-                  <TableCell align="left">{row.modificationDate}</TableCell>
+                  <TableCell align="left">{room.number}</TableCell>
+                  <TableCell align="left">
+                    {room.availability ? "Yes" : "No"}
+                  </TableCell>
+                  <TableCell align="left">{room.adults}</TableCell>
+                  <TableCell align="left">{room.children}</TableCell>
+                  <TableCell align="left">{room.creationDate}</TableCell>
+                  <TableCell align="left">{room.modificationDate}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-        {selectedRow && (
-          <UpdateHotelForm
+        {selectedRoom && (
+          <UpdateRoomForm
             open={isUpdateFormOpen}
             handleClose={() => setIsUpdateFormOpen(false)}
             handleUpdate={handleUpdate}
-            initialData={selectedRow}
+            initialData={selectedRoom}
           />
         )}
       </Box>
@@ -159,4 +158,4 @@ const HotelTable = () => {
   );
 };
 
-export default HotelTable;
+export default RoomTable;
