@@ -1,4 +1,3 @@
-// HotelTable.tsx
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -12,21 +11,21 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import HotelForm from "../Hotel-Form/HotelForm";
-import UpdateHotelForm from "../Update-Hotel-Form/UpdateHotelForm";
+import CityForm from "../City-Form/CityForm";
+import UpdateCityForm from "../Update-City-Form/UpdateCityForm";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 export interface Row {
   name: string;
-  starRate: number;
-  owner: string;
-  roomNumber: number;
+  country: string;
+  postOffice: string;
+  numberOfHotels: number;
   creationDate: string;
   modificationDate: string;
 }
 
-const HotelTable = () => {
+const CityTable = () => {
   const [tableRows, setTableRows] = useState<Row[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
@@ -37,9 +36,9 @@ const HotelTable = () => {
     const sampleData: Row[] = [
       {
         name: "City A",
-        starRate: 4,
-        owner: "John Doe",
-        roomNumber: 101,
+        country: "Country A",
+        postOffice: "Post Office A",
+        numberOfHotels: 10,
         creationDate: "2022-01-01",
         modificationDate: "2022-01-05",
       },
@@ -81,7 +80,7 @@ const HotelTable = () => {
         }}
       >
         <Box display="flex" justifyContent="space-between" sx={{ mb: 2 }}>
-          <Typography variant="h5">Manage Hotels</Typography>
+          <Typography variant="h5">Manage Citys</Typography>
           <Button
             variant="contained"
             color="primary"
@@ -89,7 +88,7 @@ const HotelTable = () => {
           >
             Create
           </Button>
-          <HotelForm
+          <CityForm
             open={isFormOpen}
             handleClose={() => setIsFormOpen(false)}
             handleCreate={handleCreate}
@@ -102,10 +101,10 @@ const HotelTable = () => {
               <TableRow>
                 <TableCell>Delete Hotel</TableCell>
                 <TableCell>Update</TableCell>
-                <TableCell align="left">Name</TableCell>
-                <TableCell align="left">Star Rate</TableCell>
-                <TableCell align="left">Owner</TableCell>
-                <TableCell align="left">Room Number</TableCell>
+                <TableCell align="left">City</TableCell>
+                <TableCell align="left">Country</TableCell>
+                <TableCell align="left">Post Office</TableCell>
+                <TableCell align="left">Number of Hotels</TableCell>
                 <TableCell align="left">Creation Date</TableCell>
                 <TableCell align="left">Modification Date</TableCell>
               </TableRow>
@@ -136,9 +135,9 @@ const HotelTable = () => {
                     </Button>
                   </TableCell>
                   <TableCell align="left">{row.name}</TableCell>
-                  <TableCell align="left">{row.starRate}</TableCell>
-                  <TableCell align="left">{row.owner}</TableCell>
-                  <TableCell align="left">{row.roomNumber}</TableCell>
+                  <TableCell align="left">{row.country}</TableCell>
+                  <TableCell align="left">{row.postOffice}</TableCell>
+                  <TableCell align="left">{row.numberOfHotels}</TableCell>
                   <TableCell align="left">{row.creationDate}</TableCell>
                   <TableCell align="left">{row.modificationDate}</TableCell>
                 </TableRow>
@@ -147,7 +146,7 @@ const HotelTable = () => {
           </Table>
         </TableContainer>
         {selectedRow && (
-          <UpdateHotelForm
+          <UpdateCityForm
             open={isUpdateFormOpen}
             handleClose={() => setIsUpdateFormOpen(false)}
             handleUpdate={handleUpdate}
@@ -159,4 +158,4 @@ const HotelTable = () => {
   );
 };
 
-export default HotelTable;
+export default CityTable;
